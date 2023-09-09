@@ -7,14 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F64389552AAC590800D945EF /* The_Matrix_ScreensaverView.h in Headers */ = {isa = PBXBuildFile; fileRef = F64389542AAC590800D945EF /* The_Matrix_ScreensaverView.h */; };
-		F64389572AAC590800D945EF /* The_Matrix_ScreensaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = F64389562AAC590800D945EF /* The_Matrix_ScreensaverView.m */; };
+		F64389612AAC5B5B00D945EF /* MatrixCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64389602AAC5B5B00D945EF /* MatrixCode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F64389512AAC590800D945EF /* The Matrix Screensaver.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "The Matrix Screensaver.saver"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F64389542AAC590800D945EF /* The_Matrix_ScreensaverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = The_Matrix_ScreensaverView.h; sourceTree = "<group>"; };
-		F64389562AAC590800D945EF /* The_Matrix_ScreensaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = The_Matrix_ScreensaverView.m; sourceTree = "<group>"; };
+		F643895D2AAC59D900D945EF /* The Matrix Screensaver-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "The Matrix Screensaver-Bridging-Header.h"; sourceTree = "<group>"; };
+		F64389602AAC5B5B00D945EF /* MatrixCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixCode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +32,7 @@
 			children = (
 				F64389532AAC590800D945EF /* The Matrix Screensaver */,
 				F64389522AAC590800D945EF /* Products */,
+				F643895D2AAC59D900D945EF /* The Matrix Screensaver-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -47,8 +47,7 @@
 		F64389532AAC590800D945EF /* The Matrix Screensaver */ = {
 			isa = PBXGroup;
 			children = (
-				F64389542AAC590800D945EF /* The_Matrix_ScreensaverView.h */,
-				F64389562AAC590800D945EF /* The_Matrix_ScreensaverView.m */,
+				F64389602AAC5B5B00D945EF /* MatrixCode.swift */,
 			);
 			path = "The Matrix Screensaver";
 			sourceTree = "<group>";
@@ -60,7 +59,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F64389552AAC590800D945EF /* The_Matrix_ScreensaverView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +94,7 @@
 				TargetAttributes = {
 					F64389502AAC590800D945EF = {
 						CreatedOnToolsVersion = 14.3.1;
+						LastSwiftMigration = 1430;
 					};
 				};
 			};
@@ -132,7 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F64389572AAC590800D945EF /* The_Matrix_ScreensaverView.m in Sources */,
+				F64389612AAC5B5B00D945EF /* MatrixCode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +250,7 @@
 		F643895B2AAC590800D945EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -263,6 +263,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Sidd-Coding-Projects.The-Matrix-Screensaver";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "The Matrix Screensaver-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = saver;
 			};
 			name = Debug;
@@ -270,6 +273,7 @@
 		F643895C2AAC590800D945EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -282,6 +286,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Sidd-Coding-Projects.The-Matrix-Screensaver";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "The Matrix Screensaver-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = saver;
 			};
 			name = Release;
