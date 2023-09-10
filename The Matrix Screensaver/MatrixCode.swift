@@ -11,17 +11,14 @@ class PongView: ScreenSaverView {
     
     var screenW : UInt32 = 0
     var screenH : UInt32 = 0
-    var wSpacing : UInt32 = 15
-    var vSpacing : UInt32 = 10
+    var wSpacing : UInt32 = 20
+    var vSpacing : UInt32 = 15
+    var numViews :Int = 0
+    let changingNums : Int = 20
     private var w : UInt32 = 0
     private var v : UInt32 = 0
-    private let arrayOfLetters = ["ｦ","ｧ","ｨ","ｩ","ｪ","ｫ","ｬ","ｭ","ｮ","ｯ","ｱ","ｲ","ｳ","ｴ","ｵ","ｶ","ｷ","ｸ","ｹ","ｺ","ｻ","ｼ","ｽ","ｾ","ｿ","ﾀ","ﾁ","ﾂ","ﾃ","ﾄ","ﾅ","ﾆ","ﾇ","ﾈ","ﾉ","ﾊ","ﾋ","ﾌ","ﾍ","ﾎ","ﾏ","ﾐ","ﾑ","ﾒ","ﾓ","ﾔ","ﾕ","ﾖ","ﾗ","ﾘ","ﾙ","ﾚ","ﾛ","ﾜ","ﾝ"]
-    private var ballPosition: CGPoint = .zero
-    private var ballVelocity: CGVector = .zero
-    private var paddlePosition: CGFloat = 0
-    private let ballRadius: CGFloat = 15
-    private let paddleBottomOffset: CGFloat = 100
-    private let paddleSize = NSSize(width: 60, height: 20)
+    //private let arrayOfLetters = ["ｦ","ｧ","ｨ","ｩ","ｪ","ｫ","ｬ","ｭ","ｮ","ｯ","ｱ","ｲ","ｳ","ｴ","ｵ","ｶ","ｷ","ｸ","ｹ","ｺ","ｻ","ｼ","ｽ","ｾ","ｿ","ﾀ","ﾁ","ﾂ","ﾃ","ﾄ","ﾅ","ﾆ","ﾇ","ﾈ","ﾉ","ﾊ","ﾋ","ﾌ","ﾍ","ﾎ","ﾏ","ﾐ","ﾑ","ﾒ","ﾓ","ﾔ","ﾕ","ﾖ","ﾗ","ﾘ","ﾙ","ﾚ","ﾛ","ﾜ","ﾝ"]
+    private let arrayOfLetters = ["1", "0"]
 
     // MARK: - Initialization
 
@@ -29,9 +26,6 @@ class PongView: ScreenSaverView {
         super.init(frame: frame, isPreview: isPreview)
         screenW = UInt32(NSScreen.main!.frame.width)
         screenH = UInt32(NSScreen.main!.frame.height)
-        
-        ballPosition = CGPoint(x: frame.width / 2, y: frame.height / 2)
-        ballVelocity = initialVelocity()
     }
 
     @available(*, unavailable)
@@ -41,33 +35,9 @@ class PongView: ScreenSaverView {
 
     // MARK: - Lifecycle
 
-    override func draw(_ rect: NSRect) {
-        drawBackground(.black)
-        drawBall()
-        drawPaddle()
-    }
-
     override func animateOneFrame() {
-        super.animateOneFrame()
-
-        let oobAxes = ballIsOOB()
-        if oobAxes.xAxis {
-            ballVelocity.dx *= -1
-        }
-        if oobAxes.yAxis {
-            ballVelocity.dy *= -1
-        }
-
-        let paddleContact = ballHitPaddle()
-        if paddleContact {
-            ballVelocity.dy *= -1
-        }
-
-        ballPosition.x += ballVelocity.dx
-        ballPosition.y += ballVelocity.dy
-        paddlePosition = ballPosition.x
-
-        setNeedsDisplay(bounds)
+        //self.subviews.remove(at: 0)
+        self.createCharacter()
     }
 
     // MARK: - Helper Functions
@@ -77,111 +47,69 @@ class PongView: ScreenSaverView {
         color.setFill()
         background.fill()
     }
-
-    private func drawBall() {
-        let ballRect = NSRect(x: ballPosition.x - ballRadius,
-                              y: ballPosition.y - ballRadius,
-                              width: ballRadius * 2,
-                              height: ballRadius * 2)
-        let ball = NSBezierPath(roundedRect: ballRect,
-                                xRadius: ballRadius,
-                                yRadius: ballRadius)
-        NSColor.white.setFill()
-        ball.fill()
-    }
     
     private func selectCharacter() -> String {
-        let selectedLetter = self.arrayOfLetters[Int.random(in: 1..<arrayOfLetters.count)]
+        let selectedLetter = self.arrayOfLetters[Int.random(in: 0..<arrayOfLetters.count)]
         return selectedLetter
     }
     
-    private func createCharacter() -> [NSTextField] {
-        let chosenChar = selectCharacter()
-        var arrayOfLetters = [NSTextField]()
-        var i : Int = 0
-        while w < UInt32(bounds.height) {
-            while v < UInt32(bounds.width) {
-                let letter : NSTextField = NSTextField(
-                    frame: NSMakeRect(
-                        CGFloat(w),
-                        CGFloat(v),
-                        30,
-                        35))
-                v += vSpacing
-                // config
-                letter.isEditable         = false
-                letter.isBordered         = false
-                letter.alignment          = .center
-                letter.usesSingleLineMode = false
-                letter.backgroundColor    = NSColor.clear
-                letter.font               = NSFont(name: "Raleway-Medium", size: CGFloat(50))
-                letter.stringValue        = chosenChar
-                letter.textColor          = NSColor.green
-                
-                arrayOfLetters[i] = letter
-                i += 1
-            }
-            v=0
-            w += wSpacing
+    private func numbersToChange(maxNum:UInt32) -> [Int] {
+        var numbersArray = [Int]()
+        var itr : Int = 0
+        while itr < changingNums {
+            numbersArray.append(Int.random(in: 0..<Int(maxNum)))
+            itr+=1
         }
-        w=0
-        return arrayOfLetters
+        return numbersArray
     }
     
-    private func drawPaddle() {
-        let paddleRect = NSRect(x: paddlePosition - paddleSize.width / 2,
-                                y: paddleBottomOffset - paddleSize.height / 2,
-                                width: paddleSize.width,
-                                height: paddleSize.height)
-        let paddle = NSBezierPath(rect: paddleRect)
-        NSColor.white.setFill()
-        paddle.fill()
-        DispatchQueue.global(qos: .background).async {
-            var arrOfLetters = self.createCharacter()
-//            DispatchQueue.main.async {
-//                let rows = arrOfLetters.count
-//                let columns = arrOfLetters[0].count
-//                var r = 0
-//                var c = 0
-//                while r < rows {
-//                    while c < columns {
-//                        self.addSubview(arrOfLetters[r][c])
-//                        // refresh only the letter rect
-//                        self.setNeedsDisplay(arrOfLetters[r][c].frame)
-//                        c+=1
-//                    }
-//                    r+=1
-//                }
-//            }
+    private func createCharacter() {
+        //var arrayOfLetters = [NSTextField]()
+        let maxViews = ((UInt32(bounds.width)/wSpacing)+1) * ((UInt32(bounds.height)/vSpacing)+1)
+        let charsToChange = numbersToChange(maxNum: maxViews)
+        //let charsToChange : [Int] = [1, 4, 10, 30, 40, 50, 60, 80, 55, 65]
+        var newIterator : Int = 0
+        while w <= UInt32(bounds.width) {
+            while v <= UInt32(bounds.height) {
+                if charsToChange.contains(newIterator) {
+                    let chosenChar = selectCharacter()
+                    let letter : NSTextField = NSTextField(
+                        frame: NSMakeRect(
+                            CGFloat(w),
+                            CGFloat(v),
+                            20,
+                            15))
+                    // config
+                    letter.isEditable         = false
+                    letter.isBordered         = false
+                    letter.alignment          = .left
+                    letter.usesSingleLineMode = false
+                    letter.backgroundColor    = NSColor.black
+                    letter.font               = NSFont(name: "Raleway-Medium", size: CGFloat(30))
+                    letter.stringValue        = chosenChar
+                    letter.textColor          = NSColor.green
+                    
+                    
+                    DispatchQueue.main.async {
+                        //self.subviews.remove(at: 0)
+                        
+                        self.numViews+=1
+                        if self.numViews > maxViews {
+                            self.subviews.remove(at: 0)
+                        }
+                        self.addSubview(letter)
+                        
+                        // refresh only the letter rect
+                        self.setNeedsDisplay(letter.frame)
+                    }
+                }
+                v += vSpacing
+                newIterator += 1
+            }
+            v = 0
+            w += wSpacing
         }
-    }
-
-    private func initialVelocity() -> CGVector {
-        let desiredVelocityMagnitude: CGFloat = 10
-        let xVelocity = CGFloat.random(in: 2.5...7.5)
-        let xSign: CGFloat = Bool.random() ? 1 : -1
-        let yVelocity = sqrt(pow(desiredVelocityMagnitude, 2) - pow(xVelocity, 2))
-        let ySign: CGFloat = Bool.random() ? 1 : -1
-        return CGVector(dx: xVelocity * xSign, dy: yVelocity * ySign)
-    }
-
-    private func ballIsOOB() -> (xAxis: Bool, yAxis: Bool) {
-        let xAxisOOB = ballPosition.x - ballRadius <= 0 ||
-            ballPosition.x + ballRadius >= bounds.width
-        let yAxisOOB = ballPosition.y - ballRadius <= 0 ||
-            ballPosition.y + ballRadius >= bounds.height
-        return (xAxisOOB, yAxisOOB)
-    }
-
-    private func ballHitPaddle() -> Bool {
-        let xBounds = (lower: paddlePosition - paddleSize.width / 2,
-                       upper: paddlePosition + paddleSize.width / 2)
-        let yBounds = (lower: paddleBottomOffset - paddleSize.height / 2,
-                       upper: paddleBottomOffset + paddleSize.height / 2)
-        return ballPosition.x >= xBounds.lower &&
-            ballPosition.x <= xBounds.upper &&
-            ballPosition.y - ballRadius >= yBounds.lower &&
-            ballPosition.y - ballRadius <= yBounds.upper
+        w = 0
     }
 
 }
